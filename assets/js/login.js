@@ -1,5 +1,4 @@
 $(function () {
-    const baseUrl = `http://www.liulongbin.top:3007`;
     //! 点击"去注册账号"的链接
     $('#link_reg').on('click', () => {
         $('.login-box').hide();
@@ -31,22 +30,50 @@ $(function () {
         },
     })
 
+    // 获取提示
+    const layer = layui.layer;
+
     //! 监听注册表单提交事件
     $('#form-reg').on('submit', (e) => {
         // 阻止表单默认提交行为
         e.preventDefault();
+        // 数据
+        const data = {
+            username: $('#form-reg [name=username]').val(),
+            password: $('#form-reg [name=password]').val(),
+        };
         // 发送Ajax的POST请求
         $.ajax({
-            type: 'POST',
-            url: baseUrl + '/api/reguser',
-            data: {
-                username: $('#form-reg [name=username]').val(),
-                password: $('#form-reg [name=password]').val(),
-            },
+            method: 'POST',
+            url: '/api/reguser',
+            data,
             success: (res) => {
-                if (res.status !== 0) return alert(res.message);
-                console.log(res.message);
+                if (res.status !== 0) return layer.msg(res.message);
+                layer.msg(res.message);
+                // 跳转到登录界面
+                $('#link_login').click();
             },
+        })
+    })
+
+    //! 监听登录表单提交事件
+    $('#form-login').submit(function (e) {
+        // 阻止默认提交行为
+        e.preventDefault();
+        // 发送Ajax的POST请求
+        $.ajax({
+            method: 'POST',
+            url: '/api/login',
+            // 快速获取表单中的数据
+            data: $(this).serialize(),
+            success: (res) => {
+                if (res.status !== 0) return layer.msg(res.message);
+                layer.msg(res.message);
+                // 将登录成功得到的token字符串，保存到localStorage中
+                localStorage.setItem('token', res.token);
+                // 跳转到后台主页
+                location.href = '../../index.html';
+            }
         })
     })
 })

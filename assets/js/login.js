@@ -68,11 +68,12 @@ $(function () {
             data: $(this).serialize(),
             success: (res) => {
                 if (res.status !== 0) return layer.msg(res.message);
-                layer.msg(res.message);
+                layer.msg(res.message); 
                 // 将登录成功得到的token字符串，保存到localStorage中
                 localStorage.setItem('token', res.token);
                 // 跳转到后台主页
-                location.href = '../../index.html';
+                location.href = '/09 git大事件/day3/code/index.html';
+                // location.href = '../../index.html';
             }
         })
     })

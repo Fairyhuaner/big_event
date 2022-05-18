@@ -18,7 +18,7 @@ $(function () {
     })
 })
 
-const getUserInfo = () => {
+function getUserInfo () {
     $.ajax({
         method: 'GET',
         url: '/my/userinfo',
@@ -28,13 +28,14 @@ const getUserInfo = () => {
         // },
         success: res => {
             if (res.status !== 0) return layer.msg(res.message);
+            console.log(res);
             renderAvatar(res.data);
         },
         // 有一个全局统一挂载complete回调函数
     })
 }
 
-const renderAvatar = (user) => {
+function renderAvatar (user) {
     // 用户头像
     let name = user.nickname || user.username;
     // 设置欢迎文本
